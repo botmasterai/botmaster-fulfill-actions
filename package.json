@@ -1,0 +1,42 @@
+{
+  "name": "botmaster-fulfill-actions",
+  "version": "0.0.1",
+  "description": "standard actions for botmaster-fulfill",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha --recursive ./tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/botmasterai/botmaster-fulfill-actions.git"
+  },
+  "keywords": [
+    "keys",
+    "skills",
+    "bot",
+    "orchestration",
+    "chatbot",
+    "toolkit",
+    "pipeline",
+    "framework",
+    "apis"
+  ],
+  "author": "Jonathan R Wickens",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/botmasterai/botmaster-fulfill-actions/issues"
+  },
+  "homepage": "https://github.com/botmasterai/botmaster-fulfill-actions#readme",
+  "devDependencies": {
+    "botmaster-test": "0.0.2"
+  },
+  "dependencies": {
+    "ramda": "^0.23.0"
+},
+"peerDependencies": {
+    "botmaster-fulfill": ">= 1.1.0"
+}
+}
