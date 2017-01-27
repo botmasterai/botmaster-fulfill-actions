@@ -34,9 +34,10 @@
     "botmaster-test": "0.0.2"
   },
   "dependencies": {
+    "moment-timezone": "^0.5.11",
     "ramda": "^0.23.0"
   },
   "peerDependencies": {
-    "botmaster-fulfill": ">= 1.1.0"
+    "botmaster-fulfill": ">= 2.0.1"
   }
 }

@@ -12,9 +12,9 @@ module.exports = {
     // use the last output of this action as the value for the remaining text
     replace: 'before',
     controller: function(params, cb) {
-        const newMessage = R.clone(params.context.update);
+        const newMessage = R.clone(params.update);
         newMessage.message.text = params.before;
-        params.context.bot.sendMessage(newMessage);
+        params.bot.sendMessage(newMessage);
         setTimeout(() => cb(null, ''), params.attributes.wait || DEFAULT_WAIT);
     }
 };
