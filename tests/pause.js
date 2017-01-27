@@ -1,10 +1,10 @@
-const {outgoing} = require('botmaster-fulfill');
+const {fulfillOutgoingWare} = require('../../botmaster-fulfill');
 const {
     botmaster,
     telegramMock,
     respond
 } = require('botmaster-test');
-const actions = require('../lib');
+const actions = require('../');
 
 describe('pause', () => {
     let myBotmaster;
@@ -24,7 +24,7 @@ describe('pause', () => {
             'five'
         ];
         this.timeout(messages.length * 1000 + 100);
-        myBotmaster.use('outgoing', outgoing({actions}));
+        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
         respond(myBotmaster)(messages.join('<pause />'));
         myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
         myTelegramMock
@@ -44,7 +44,7 @@ describe('pause', () => {
             'Till later!'
         ];
         this.timeout(messages.length * 1000 + 100);
-        myBotmaster.use('outgoing', outgoing({actions}));
+        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
         respond(myBotmaster)(messages.join('<pause />'));
         myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
         myTelegramMock
@@ -54,6 +54,29 @@ describe('pause', () => {
             });
 
     });
+
+    it('should pass a complex 9 message test case', function(done) {
+        const messages = [
+            'Ok, heres what you should do',
+            '1. Turn it on and off.',
+            '2. Delete stuff',
+            '3. Update your OS',
+            '4. Try stuff',
+            '5. Perform stuff <a href=\"http://site.come/ab\"> HERE</a>.',
+            'Please ensure you back up your data first',
+            'and do not forget important stuff <a href=\" http://site.com/a_FA_afc\">HERE</a>.',
+            'Have I resolved resolved your issues?'
+        ];
+        this.timeout(messages.length * 1000 + 100);
+        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+        respond(myBotmaster)(messages.join('<pause />'));
+        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+        myTelegramMock
+            .expect(messages, done)
+            .sendUpdate('hi bob', err => {
+                if (err) done(new Error('supertest error: ' + err));
+            });
+    })
 
     afterEach(function(done) {
         this.retries(4);
