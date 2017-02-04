@@ -7,7 +7,10 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha --recursive ./tests"
+    "test": "istanbul cover _mocha -- --recursive tests",
+    "tests": "mocha --recursive tests",
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "docs": "documentation-readme -s \"Reference\""
   },
   "repository": {
     "type": "git",
@@ -31,13 +34,20 @@
   },
   "homepage": "https://github.com/botmasterai/botmaster-fulfill-actions#readme",
   "devDependencies": {
-    "botmaster-test": "0.0.2"
+    "botmaster": "git+https://github.com/botmasterai/botmaster.git",
+    "botmaster-fulfill": "git+https://github.com/botmasterai/botmaster-fulfill.git#next",
+    "coveralls": "^2.11.15",
+    "documentation-readme": "^2.1.1",
+    "istanbul": "^0.4.5",
+    "mocha-lcov-reporter": "^1.2.0",
+    "mockdate": "^2.0.1",
+    "sinon": "^1.17.7"
   },
   "dependencies": {
     "moment-timezone": "^0.5.11",
     "ramda": "^0.23.0"
   },
   "peerDependencies": {
-    "botmaster-fulfill": ">= 2.0.1"
+    "botmaster-fulfill": ">= 2.0.4"
   }
 }

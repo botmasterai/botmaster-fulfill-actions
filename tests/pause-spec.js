@@ -15,6 +15,33 @@ describe('pause', () => {
         myBotmaster = botmaster;
     }));
 
+
+    it('should have a configurable wait time', function(done) {
+        const messages = ['one', 'two'];
+        this.timeout(500);
+        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+        respond(myBotmaster)(messages.join('<pause wait=100 />'));
+        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+        myTelegramMock
+            .expect(messages, done)
+            .sendUpdate('hi bob', err => {
+                if (err) done(new Error('supertest error: ' + err));
+            });
+    });
+
+    it('should have a configurable wait time and forgive those who pass a string', function(done) {
+        const messages = ['one', 'two'];
+        this.timeout(500);
+        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+        respond(myBotmaster)(messages.join('<pause wait="100" />'));
+        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+        myTelegramMock
+            .expect(messages, done)
+            .sendUpdate('hi bob', err => {
+                if (err) done(new Error('supertest error: ' + err));
+            });
+    });
+
     it('should pass a simple 5 message test case', function(done) {
         const messages = [
             'one',
@@ -76,7 +103,7 @@ describe('pause', () => {
             .sendUpdate('hi bob', err => {
                 if (err) done(new Error('supertest error: ' + err));
             });
-    })
+    });
 
     afterEach(function(done) {
         this.retries(4);
