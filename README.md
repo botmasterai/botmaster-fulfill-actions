@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/botmasterai/botmaster-fulfill-actions.svg?branch=master)](https://travis-ci.org/botmasterai/botmaster-fulfill-actions)
+[![Coverage Status](https://coveralls.io/repos/github/botmasterai/botmaster-fulfill-actions/badge.svg?branch=master)](https://coveralls.io/github/botmasterai/botmaster-fulfill-actions?branch=master)
 
 # Botmaster actions
 
