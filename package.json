@@ -36,6 +36,7 @@
   "devDependencies": {
     "botmaster": "git+https://github.com/botmasterai/botmaster.git",
     "botmaster-fulfill": "git+https://github.com/botmasterai/botmaster-fulfill.git#next",
+    "botmaster-test": "0.0.2",
     "coveralls": "^2.11.15",
     "documentation-readme": "^2.1.1",
     "istanbul": "^0.4.5",
