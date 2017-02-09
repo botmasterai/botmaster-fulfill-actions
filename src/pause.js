@@ -13,6 +13,7 @@
 const R = require('ramda');
 
 const DEFAULT_WAIT = 1000;
+const lensImplementsTyping = R.lensPath(['bot', 'implements', 'typing']);
 
 const spec = {
     series: true,
@@ -22,6 +23,9 @@ const spec = {
         const newMessage = R.clone(params.update);
         newMessage.message.text = params.before;
         params.bot.sendMessage(newMessage);
+        if (R.view(lensImplementsTyping, params)) {
+            params.bot.sendIsTypingMessageTo(params.update.sender.id, {ignoreMiddleware: true});
+        }
         const wait = R.isNil(params.attributes.wait) ? DEFAULT_WAIT : Number(params.attributes.wait);
         setTimeout(() => cb(null, ''), wait);
     }
