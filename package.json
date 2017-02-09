@@ -2,15 +2,18 @@
   "name": "botmaster-fulfill-actions",
   "version": "0.1.2",
   "description": "standard actions for botmaster-fulfill",
-  "main": "index.js",
+  "main": "dist/index.js",
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "test": "istanbul cover _mocha -- --recursive tests",
-    "tests": "mocha --recursive tests",
+    "pretest": "npm run build",
+    "test": "istanbul cover _mocha -- --recursive dist/tests",
+    "tests": "mocha --recursive src/tests",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "docs": "documentation-readme -s \"Reference\""
+    "build": "mkdir -p dist && babel --presets=es2015,babili src --out-dir dist",
+    "docs": "documentation readme src/index.js --section=\"Reference\"",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -34,11 +37,14 @@
   },
   "homepage": "https://github.com/botmasterai/botmaster-fulfill-actions#readme",
   "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-babili": "0.0.10",
+    "babel-preset-es2015": "^6.22.0",
     "botmaster": "git+https://github.com/botmasterai/botmaster.git",
-    "botmaster-fulfill": "git+https://github.com/botmasterai/botmaster-fulfill.git#next",
+    "botmaster-fulfill": "2.1.3",
     "botmaster-test": "0.0.2",
     "coveralls": "^2.11.15",
-    "documentation-readme": "^2.1.1",
+    "documentation": "^4.0.0-beta.18",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "mocha-lcov-reporter": "^1.2.0",
