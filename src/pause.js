@@ -6,6 +6,7 @@
  *  evaluated in series
  *  after evaluating all text / xml before removed
  *  controller sends text before and then waits before allowing rest of text/xml to be evaluated
+ *  if the bot implements typing a typing status is sent between pauses.
  *  @param wait {String} how long to wait in ms between each defaults to 1000
  *  @module pause
  */
