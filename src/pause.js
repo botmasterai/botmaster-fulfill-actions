@@ -24,12 +24,13 @@ const spec = {
     controller: (params, cb) => {
         const newMessage = R.clone(params.update);
         newMessage.message.text = params.before;
-        params.bot.sendMessage(newMessage);
-        if (R.view(lensImplementsTyping, params) && R.view(lensId, params)) {
-            params.bot.sendIsTypingMessageTo(R.view(lensId, params), {ignoreMiddleware: true});
-        }
-        const wait = R.isNil(params.attributes.wait) ? DEFAULT_WAIT : Number(params.attributes.wait);
-        setTimeout(() => cb(null, ''), wait);
+        params.bot.sendMessage(newMessage).then( () => {
+            if (R.view(lensImplementsTyping, params) && R.view(lensId, params)) {
+                params.bot.sendIsTypingMessageTo(R.view(lensId, params), {ignoreMiddleware: true});
+            }
+            const wait = R.isNil(params.attributes.wait) ? DEFAULT_WAIT : Number(params.attributes.wait);
+            setTimeout(() => cb(null, ''), wait);
+        });
     }
 };
 
