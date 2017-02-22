@@ -22,7 +22,7 @@ const spec = {
     evaluate: 'step',
     replace: 'before',
     controller: (params, cb) => {
-        const newMessage = R.clone(params.update);
+        const newMessage = R.clone(params.message);
         newMessage.message.text = params.before;
         params.bot.sendMessage(newMessage).then( () => {
             if (R.view(lensImplementsTyping, params) && R.view(lensId, params)) {

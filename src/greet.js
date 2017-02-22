@@ -6,7 +6,8 @@
  * <greet tz='America/New_York' lang='es' />
  * ```
  *
- * Outputs based on the detected system language
+ * Outputs based on the system language, or set attribute, default is english if none of these are found.
+ * Timezone is based on the users timezone on bots that implement getUserInfo, the set attribute, default is UTC if noen of these are found.
  *
  * **English (en)**
  * * between 4 am and 12 pm say "Good morning"
@@ -57,11 +58,13 @@ const spec = {
     controller
 };
 
+const lensImplementsTimezone = R.lensPath(['bot', 'implements', 'userInfo', 'timezone']);
+
 const getTimezone = params => {
     const userId = getUserId(params);
     if (params.attributes.tz)
         return Promise.resolve(params.attributes.tz);
-    else if (userId && params.bot && params.bot.getUserInfo)
+    else if (userId && R.view(lensImplementsTimezone, params))
         return params.bot.getUserInfo(userId)
             .then(R.view(R.lensProp('timezone')))
             .catch( err => {

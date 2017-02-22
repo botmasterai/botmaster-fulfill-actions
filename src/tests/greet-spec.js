@@ -1,4 +1,6 @@
 const MockDate = require('mockdate');
+const MockTimezone = require('timezone-mock');
+
 const {fulfillOutgoingWare} = require('botmaster-fulfill');
 const {
     botmaster,
@@ -20,52 +22,92 @@ describe('greet', () => {
         myBotmaster = botmaster;
     }));
 
+    describe('System time US/Pacific', () => {
+        before(() => {
+            MockTimezone.register('US/Pacific');
+            MockDate.set(0);
+        });
 
-    it('should greet when no params are passed', function(done) {
-        MockDate.set(GMT_4PM);
-        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
-        respond(myBotmaster)('<greet tz="Europe/London" />');
-        //respond(myBotmaster)('<greet />');
-        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
-        myTelegramMock
-            .expect(['Good afternoon'], err  => {
-                console.log('hi')
-                MockDate.reset();
-                done(err);
-            })
-            .sendUpdate('hi bob', err => {
-                if (err) done(new Error('supertest error: ' + err));
+        describe('8 AM UTC', () => {
+
+            before( () => {
+                MockDate.set(GMT_8AM);
             });
+
+
+            it('should greet when tz is passed', function(done) {
+                myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+                respond(myBotmaster)('<greet tz="Europe/London" />');
+                myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+                myTelegramMock
+                    .expect(['Good morning'], err  => {
+                        done(err);
+                    })
+                    .sendUpdate('hi bob', err => {
+                        if (err) done(new Error('supertest error: ' + err));
+                    });
+            });
+
+            after(() => {
+                MockDate.reset();
+            });
+
+        });
+
+        after( () => {
+            MockTimezone.unregister();
+            MockDate.reset();
+        });
     });
 
-    it('should greet when lang is passed', function(done) {
-        MockDate.set(GMT_4PM);
-        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
-        respond(myBotmaster)('<greet lang="es" />');
-        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
-        myTelegramMock
-            .expect(['Buenas tardes'], err  => {
-                MockDate.reset();
-                done(err);
-            })
-            .sendUpdate('hi bob', err => {
-                if (err) done(new Error('supertest error: ' + err));
-            });
-    });
+    describe('System time UTC', () => {
+        before( () => {
+            MockTimezone.register('UTC');
+            MockDate.set(0);
+        });
 
-    it('should greet when tz is passed', function(done) {
-        MockDate.set(GMT_8AM);
-        myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
-        respond(myBotmaster)('<greet tz="Europe/London" />');
-        myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
-        myTelegramMock
-            .expect(['Good morning'], err  => {
-                done(err);
-                MockDate.reset();
-            })
-            .sendUpdate('hi bob', err => {
-                if (err) done(new Error('supertest error: ' + err));
+        describe('4 PM UTC', () => {
+
+            before( () => {
+                MockDate.set(GMT_4PM);
             });
+
+
+            it('should greet when no params are passed', function(done) {
+                myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+                respond(myBotmaster)('<greet />');
+                myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+                myTelegramMock
+                .expect(['Good afternoon'], err  => {
+                    done(err);
+                })
+                .sendUpdate('hi bob', err => {
+                    if (err) done(new Error('supertest error: ' + err));
+                });
+            });
+
+            it('should greet when lang is passed', function(done) {
+                myBotmaster.use('outgoing', fulfillOutgoingWare({actions}));
+                respond(myBotmaster)('<greet lang="es" />');
+                myBotmaster.on('error', (bot, error) => done(new Error(`botmaster error: ${error}`)));
+                myTelegramMock
+                .expect(['Buenas tardes'], err  => {
+                    done(err);
+                })
+                .sendUpdate('hi bob', err => {
+                    if (err) done(new Error('supertest error: ' + err));
+                });
+            });
+
+            after(() => {
+                MockDate.reset();
+            });
+        });
+
+        after( () => {
+            MockTimezone.unregister();
+            MockDate.reset();
+        });
     });
 
 
