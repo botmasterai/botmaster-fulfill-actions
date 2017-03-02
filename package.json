@@ -1,6 +1,6 @@
 {
   "name": "botmaster-fulfill-actions",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "standard actions for botmaster-fulfill",
   "main": "dist/index.js",
   "directories": {
