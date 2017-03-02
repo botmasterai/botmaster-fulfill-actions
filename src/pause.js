@@ -14,21 +14,19 @@
 const R = require('ramda');
 
 const DEFAULT_WAIT = 1000;
-const lensImplementsTyping = R.lensPath(['bot', 'implements', 'typing']);
-const lensId = R.lensPath(['update', 'recipient', 'id']);
+const lensImplementsTyping = R.lensPath(['implements', 'typing']);
+const lensId = R.lensPath(['sender', 'id']);
 
 const spec = {
     series: true,
     evaluate: 'step',
     replace: 'before',
-    controller: (params, cb) => {
-        const newMessage = R.clone(params.message);
-        newMessage.message.text = params.before;
-        params.bot.sendMessage(newMessage).then( () => {
-            if (R.view(lensImplementsTyping, params) && R.view(lensId, params)) {
-                params.bot.sendIsTypingMessageTo(R.view(lensId, params), {ignoreMiddleware: true});
+    controller: ({before, bot, attributes, update}, cb) => {
+        bot.reply(update, before, {__update: update}).then( () => {
+            if (R.view(lensImplementsTyping, update) && R.view(lensId, bot)) {
+                bot.sendIsTypingMessageTo(R.view(lensId, update), {ignoreMiddleware: true});
             }
-            const wait = R.isNil(params.attributes.wait) ? DEFAULT_WAIT : Number(params.attributes.wait);
+            const wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
             setTimeout(() => cb(null, ''), wait);
         });
     }

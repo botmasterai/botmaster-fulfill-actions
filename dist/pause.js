@@ -1,1 +1,44 @@
-'use strict';var R=require('ramda'),DEFAULT_WAIT=1e3,lensImplementsTyping=R.lensPath(['bot','implements','typing']),lensId=R.lensPath(['update','recipient','id']),spec={series:!0,evaluate:'step',replace:'before',controller:function controller(a,b){var c=R.clone(a.message);c.message.text=a.before,a.bot.sendMessage(c).then(function(){R.view(lensImplementsTyping,a)&&R.view(lensId,a)&&a.bot.sendIsTypingMessageTo(R.view(lensId,a),{ignoreMiddleware:!0});var d=R.isNil(a.attributes.wait)?DEFAULT_WAIT:+a.attributes.wait;setTimeout(function(){return b(null,'')},d)})}};module.exports=spec;
+'use strict';
+
+/**
+ *  Break text up with a separate messages pausing before each one
+ *  ```xml
+ *  <pause wait=2000 />
+ *  ```
+ *  evaluated in series
+ *  after evaluating all text / xml before removed
+ *  controller sends text before and then waits before allowing rest of text/xml to be evaluated
+ *  if the bot implements typing a typing status is sent between pauses.
+ *  @param wait {String} how long to wait in ms between each defaults to 1000
+ *  @module pause
+ */
+
+var R = require('ramda');
+
+var DEFAULT_WAIT = 1000;
+var lensImplementsTyping = R.lensPath(['implements', 'typing']);
+var lensId = R.lensPath(['sender', 'id']);
+
+var spec = {
+    series: true,
+    evaluate: 'step',
+    replace: 'before',
+    controller: function controller(_ref, cb) {
+        var before = _ref.before,
+            bot = _ref.bot,
+            attributes = _ref.attributes,
+            update = _ref.update;
+
+        bot.reply(update, before, { __update: update }).then(function () {
+            if (R.view(lensImplementsTyping, update) && R.view(lensId, bot)) {
+                bot.sendIsTypingMessageTo(R.view(lensId, update), { ignoreMiddleware: true });
+            }
+            var wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
+            setTimeout(function () {
+                return cb(null, '');
+            }, wait);
+        });
+    }
+};
+
+module.exports = spec;

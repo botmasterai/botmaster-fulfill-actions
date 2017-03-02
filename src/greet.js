@@ -66,7 +66,11 @@ const getTimezone = params => {
         return Promise.resolve(params.attributes.tz);
     else if (userId && R.view(lensImplementsTimezone, params))
         return params.bot.getUserInfo(userId)
-            .then(R.view(R.lensProp('timezone')))
+            .then(response => debug(`got userinfo ${response}`))
+            .then(R.compose(
+                R.defaultTo(DEFAULT_TIMEZONE),
+                R.view(R.lensProp('timezone'))
+            ))
             .catch( err => {
                 debug('Error getting user timezone from bot', err);
                 return Promise.resolve(DEFAULT_TIMEZONE);
@@ -87,12 +91,19 @@ const getGreetings = params => {
 const getGreetingFromHour = (greetings, hour) => R.compose(
     randomGreeting,
     R.prop('greetings'),
-    R.defaultTo({}),
+    R.defaultTo({
+        greetings: ['Hi', 'Ciao']
+    }),
     findGreetings(greetings)
 )(hour);
 
 const findGreetings = greetings => hour => R.find(R.allPass([gteStart(hour), ltEnd(hour)]), greetings);
-const gteStart = hour => greeting => greeting.start <= hour;
+const gteStart = hour => greeting => {
+    if (greeting.end - greeting.start > 0)
+        return greeting.start <= hour;
+    else
+        return greeting.start - 24 <= hour;
+};
 const ltEnd = hour => greeting => {
     if (greeting.end - greeting.start > 0)
         return greeting.end > hour;
