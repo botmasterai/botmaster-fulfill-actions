@@ -31,7 +31,7 @@ var spec = {
 
         var wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
         var sendNext = function sendNext() {
-            if (R.view(lensImplementsTyping, update) && R.view(lensId, bot)) {
+            if (R.view(lensImplementsTyping, bot) && R.view(lensId, update)) {
                 bot.sendIsTypingMessageTo(R.view(lensId, update), { ignoreMiddleware: true });
             }
             setTimeout(function () {
