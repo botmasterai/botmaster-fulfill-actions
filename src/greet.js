@@ -79,7 +79,7 @@ const getTimezone = params => {
         return Promise.resolve(DEFAULT_TIMEZONE);
 };
 
-const getUserId = R.view(R.lensPath(['update', 'recipient', 'id']));
+const getUserId = R.view(R.lensPath(['update', 'sender', 'id']));
 
 const getHour = timezone => new Moment().tz(timezone).hour();
 

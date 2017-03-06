@@ -22,13 +22,22 @@ const spec = {
     evaluate: 'step',
     replace: 'before',
     controller: ({before, bot, attributes, update}, cb) => {
-        bot.reply(update, before, {__update: update}).then( () => {
+        const wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
+        const sendNext = () => {
             if (R.view(lensImplementsTyping, update) && R.view(lensId, bot)) {
                 bot.sendIsTypingMessageTo(R.view(lensId, update), {ignoreMiddleware: true});
             }
-            const wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
             setTimeout(() => cb(null, ''), wait);
-        });
+        };
+        if (before === '') {
+            sendNext();
+        } else {
+            bot.reply(update, before, {__update: update}).then( () => {
+                sendNext();
+            }).catch(() => {
+                sendNext();
+            });
+        }
     }
 };
 

@@ -63,7 +63,7 @@ var getTimezone = function getTimezone(params) {
     });else return Promise.resolve(DEFAULT_TIMEZONE);
 };
 
-var getUserId = R.view(R.lensPath(['update', 'recipient', 'id']));
+var getUserId = R.view(R.lensPath(['update', 'sender', 'id']));
 
 var getHour = function getHour(timezone) {
     return new Moment().tz(timezone).hour();
@@ -75,7 +75,9 @@ var getGreetings = function getGreetings(params) {
 };
 
 var getGreetingFromHour = function getGreetingFromHour(greetings, hour) {
-    return R.compose(randomGreeting, R.prop('greetings'), R.defaultTo({}), findGreetings(greetings))(hour);
+    return R.compose(randomGreeting, R.prop('greetings'), R.defaultTo({
+        greetings: ['Hi', 'Ciao']
+    }), findGreetings(greetings))(hour);
 };
 
 var findGreetings = function findGreetings(greetings) {

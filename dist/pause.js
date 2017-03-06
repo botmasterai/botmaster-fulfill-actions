@@ -29,15 +29,24 @@ var spec = {
             attributes = _ref.attributes,
             update = _ref.update;
 
-        bot.reply(update, before, { __update: update }).then(function () {
+        var wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
+        var sendNext = function sendNext() {
             if (R.view(lensImplementsTyping, update) && R.view(lensId, bot)) {
                 bot.sendIsTypingMessageTo(R.view(lensId, update), { ignoreMiddleware: true });
             }
-            var wait = R.isNil(attributes.wait) ? DEFAULT_WAIT : Number(attributes.wait);
             setTimeout(function () {
                 return cb(null, '');
             }, wait);
-        });
+        };
+        if (before === '') {
+            sendNext();
+        } else {
+            bot.reply(update, before, { __update: update }).then(function () {
+                sendNext();
+            }).catch(function () {
+                sendNext();
+            });
+        }
     }
 };
 
