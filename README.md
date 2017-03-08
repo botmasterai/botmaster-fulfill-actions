@@ -53,6 +53,13 @@ Outputs based on the detected system language
 -   between 12 pm and 8pm  say "Buenas tardes"
 -   between 8 pm and 4am  say "Buenas noches"
 
+**Dutch (nl)**
+
+-   between 4 am and 12 pm say "Goedemorgen"
+-   between 12 pm and 6 pm  say "Goedemiddag"
+-   between 6 pm and 12 am  say "Goedenavond"
+-   between 12 am and 4 am  say "Goedenacht"
+
 **Parameters**
 
 -   `tz` **[String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)** Which timezone to use for the time-based greeting. Defaults to GMT. To see available options see <http://momentjs.com/timezone/>
