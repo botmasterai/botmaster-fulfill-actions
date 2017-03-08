@@ -40,7 +40,13 @@ const GREETINGS = {
         {start: 4, end: 12, greetings: ['Buenos dias']},
         {start: 12, end: 20, greetings: ['Buenas tardes']},
         {start: 20, end: 4, greetings: ['Buenas noches']}
-    ]
+    ],
+    nl: [
+        { start: 4, end: 12, greetings: ['Goedemorgen'] },
+        { start: 12, end: 18, greetings: ['Goedemiddag'] },
+        { start: 18, end: 0, greetings: ['Goedenavond'] },
+        { start: 0, end: 4, greetings: ['Goedenacht'] }
+    ]    
 };
 
 
